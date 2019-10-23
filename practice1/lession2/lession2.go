@@ -31,10 +31,9 @@ func RollStat(rolls int) {
 		num := strconv.Itoa(i)
 		count := float64(strings.Count(s, num))
 
-		fmt.Println(count)
-		chance := float64(i) / count
+		chance := count / float64(rolls)
 
-		fmt.Printf("%d --- %2.1F", i, chance)
+		fmt.Printf("\n%d --- %2.1F", i, chance)
 	}
 
 }
