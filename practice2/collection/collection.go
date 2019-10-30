@@ -1,11 +1,20 @@
 package collection
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
-type Collection struct {
+const sep = "|"
+
+type List struct {
 	Element string
 }
 
-func (s Collection) Print() {
+func (s List) Print() {
 	fmt.Println(s)
+}
+
+func (c *List) Add(i int) {
+	c.Element += strconv.Itoa(i) + sep
 }

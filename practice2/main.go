@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
-	. "practice2/collection"
+	"practice2/collection"
 )
 
 func main() {
 
-	col := Collection{
-		Element: "aaa",
+	col := collection.List{}
+
+	for i := 0; i < 10; i++ {
+		col.Add(i)
 	}
 
-	col.Element = "d"
-	fmt.Println(col.Element)
 	col.Print()
 }
