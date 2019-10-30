@@ -5,16 +5,51 @@ import (
 	"strconv"
 )
 
-const sep = "|"
-
 type List struct {
-	Element string
+	Length int
+	First  *Element
+	Last   *Element
 }
 
-func (s List) Print() {
-	fmt.Println(s)
+type Element struct {
+	Value string
+	Next  *Element
+	Prev  *Element
+}
+
+func (c *List) Print() {
+	res := c.First
+	for i := 0; i < 10; i++ { //FIXME
+		fmt.Print(res.Next.Value, " ")
+		res = res.Next
+	}
 }
 
 func (c *List) Add(i int) {
-	c.Element += strconv.Itoa(i) + sep
+	e := &Element{
+		Value: strconv.Itoa(i),
+	}
+
+	if c.First == nil {
+		c.First = e
+		c.Last = e
+	} else {
+		last := c.Last
+		last.Next = e
+		c.Last = e
+		c.Last.Prev = last
+	}
+	c.Length++
+}
+
+func (c *List) Get(i int) *Element {
+	res := c.First
+	for a := 0; a < i; a++ {
+		res = res.Next
+	}
+	return res
+}
+
+func (c *List) Remove(i int) {
+	c.Get(i).Value = "1111" //.Value = "-" //c.Get(i).Prev.Prev
 }
