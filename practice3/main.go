@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello")
+	fmt.Println("Choose bot language")
 	var language string
 	_, err := fmt.Scanln(&language)
 	if err != nil {
@@ -18,7 +18,7 @@ func main() {
 
 	newBot := createBot(language)
 
-	newBot.Introduce()
+	newBot.SayHello()
 	
 	for true {
 		var reply string

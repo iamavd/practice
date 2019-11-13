@@ -6,11 +6,11 @@ import (
 )
 
 var days = [...]string{
-	"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"}
+	"воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"}
 
 var months = [...]string{
-	"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-	"Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
+	"января", "февраля", "марта", "апреля", "мая", "июня",
+	"июля", "августа", "сентября", "октября", "ноября", "декабря",
 }
 
 type Russian struct {
@@ -18,26 +18,23 @@ type Russian struct {
 }
 
 func (r Russian) SayHello() {
-	fmt.Println("O, privet. Davai rush B")
+	fmt.Println("Привет, меня зовут", r.Name)
 }
 
-func (r Russian) CurrentTime() {
-	//	name := "Europe/Minsk" // Europe/London
+func (r Russian) currentTime() {
 	fmt.Println("Текущее время")
 	printTime("Europe/Minsk", "15:04")
 }
 
-func (r Russian) CurrentDate() {
-	fmt.Println("Дата - ??????")
+func (r Russian) currentDate() {
+	fmt.Println("Сегодня", localizeDate(now(),months))
 }
 
-func (r Russian) Today() {
-	fmt.Println("Сегодня", date("Monday"))
-	printTime("Europe/Moscow", "Monday")
-
+func (r Russian) today() {
+	fmt.Println("Сегодня", localizeDay(now(),days))
 }
 
-func (r Russian) Bye() {
+func (r Russian) bye() {
 	fmt.Println("Пока")
 	os.Exit(1)
 }
@@ -49,8 +46,4 @@ func (r Russian) misUnderstanding() {
 func (e Russian) initLang() []string {
 	commands := []string{"Привет", "Время", "Дата", "День", "Пока"}
 	return commands
-}
-
-func (e Russian) Introduce() {
-	fmt.Println("Привет, меня зовут", e.Name)
 }

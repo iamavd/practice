@@ -2,13 +2,12 @@ package bot
 
 type Speaker interface {
 	SayHello()
-	CurrentTime()
-	CurrentDate()
-	Today()
-	Bye()
+	currentTime()
+	currentDate()
+	today()
+	bye()
 	misUnderstanding()
 	initLang() []string
-	Introduce()
 }
 
 func Listner(s Speaker, reply string) {
@@ -18,13 +17,13 @@ func Listner(s Speaker, reply string) {
 	case cmnds[0], "1":
 		s.SayHello()
 	case cmnds[1], "2":
-		s.CurrentTime()
+		s.currentTime()
 	case cmnds[2], "3":
-		s.CurrentDate()
+		s.currentDate()
 	case cmnds[3], "4":
-		s.Today()
+		s.today()
 	case cmnds[4], "5":
-		s.Bye()
+		s.bye()
 	default:
 		s.misUnderstanding()
 	}
