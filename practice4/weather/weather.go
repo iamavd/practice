@@ -14,8 +14,18 @@ type Weather struct {
 	Wind struct {
 		Speed float64 `json:"speed"`
 		Deg   int     `json:"deg"`
+		Gust  int `json:"gust"`
 	} `json:"wind"`
 	Clouds struct {
 		All int `json:"all"`
 	} `json:"clouds"`
+	Sys struct {
+		Sunrise int64    `json:"sunrise"`
+		Sunset  int64    `json:"sunset"`
+	} `json:"sys"`
+	SunriseDaily    int    `json:"sunrise"`
+	SunsetDaily     int    `json:"sunset"`
+}
+
+type DailyWeather struct {
 }

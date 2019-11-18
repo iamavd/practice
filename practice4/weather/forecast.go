@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type Meteorologist struct {
+	city string
 }
 
 func (m Meteorologist) WeatherForecast(city string) Weather {
@@ -34,6 +36,7 @@ func weatherResponse(link string) []byte {
 
 func createLink(city string) string {
 	return "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=ru&units=metric&appid=2c19a8c670afc70f2ae7a81f229fce3d"
+//	return "http://api.openweathermap.org/data/2.5/forecast?q=Moscow,us&appid=2c19a8c670afc70f2ae7a81f229fce3d" //link for 5 day forecast
 }
 
 func (w Weather) GetTemperature() (temp float64, tempMin float64, tempMax float64) {
@@ -51,35 +54,37 @@ func (w Weather) GetHumidity() int {
 	return w.Main.Humidity
 }
 
-func (w Weather) GetWind() (speed float64, direction string) {
+func (w Weather) GetWind() (speed float64, direction string, gust int) {
 	speed = w.Wind.Speed
 	direction = windDirection(w.Wind.Deg)
+	gust = w.Wind.Gust
 	return
 }
 
 func windDirection(deg int) string {
 	switch {
-	case deg < 45:
-		return "СВ"
-	case deg > 45, deg < 90:
-		return "В"
-	case deg > 90, deg < 135:
-		return "ЮВ"
-	case deg > 135, deg < 180:
-		return "Ю"
-	case deg > 180, deg < 225:
-		return "ЮЗ"
-	case deg > 225, deg < 270:
-		return "З"
-	case deg > 270, deg < 315:
-		return "СЗ"
-	case deg > 315:
-		return "С"
+	case deg > 45, deg < 135:
+		return "восточный"
+	case deg > 135, deg < 225:
+		return "южный"
+	case deg > 225, deg < 315:
+		return "западный"
+	case deg > 315, deg < 45:
+		return "северный"
 	}
-	return "--"
+	return ""
 }
 
-/*
-func (m Meteorologist)PrintForecast() {
-	fmt.Printf("Сегодня в городе %v %v, температура воздуха %v°С, ветер %v%м/с с порывами до %vм/с. Влажность воздуха %v%%. Восход солнца %v, заход солнца %v.", m.WeatherForecast.)
-}*/
+func PrintForecast(w Weather) {
+	temp, _, _ := w.GetTemperature()
+	speed, dir, gust := w.GetWind()
+	gustOut := ""
+	if gust != 0 {
+		gustOut = fmt.Sprintf(",c порывами до %v м/c",gust)
+	}
+	fmt.Printf("Сегодня в городе %v %v, температура воздуха %.1f°С, ветер %v %v м/с%v.Влажность воздуха %v%%. Восход солнца %v, заход солнца %v","CITYNAME",w.GetCloudiness(),temp,dir,speed,gustOut,w.GetHumidity(),encodeTime(w.Sys.Sunrise), encodeTime(w.Sys.Sunset)) //, ветер %v%м/с с порывами до %vм/с. Влажность воздуха %v%%. Восход солнца %v, заход солнца %v.
+}
+
+func encodeTime(utc int64) string{
+	return time.Unix(utc,0).Format("15:04")
+}

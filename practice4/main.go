@@ -10,5 +10,5 @@ func main() {
 	m := weather.Meteorologist{}
 	fmt.Println(m.WeatherForecast("Moscow").GetCloudiness())
 
-	fmt.Println(weather.Direction(44), weather.Direction(46))
+	weather.PrintForecast(m.WeatherForecast("Mahilyow"))
 }
