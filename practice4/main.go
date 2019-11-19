@@ -6,5 +6,8 @@ import (
 
 func main() {
 	m := weather.Meteorologist{}
-	weather.PrintForecast(m.WeatherForecast("Moscow", "20"))
+
+	m.WeatherForecast("Moscow").PrintForecast()
+	m.DailyForecast("Mahilyow", 20).PrintForecast()
+
 }
