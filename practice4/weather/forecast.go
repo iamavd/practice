@@ -8,19 +8,22 @@ import (
 	"time"
 )
 
+const ansoluteZero = -273.15
+const apiKey = "2c19a8c670afc70f2ae7a81f229fce3d"
+
 type Meteorologist struct {
 	city string
 }
 
-func (m Meteorologist) WeatherForecast(city string) Weather {
-	w := Weather{}
-	link := createLink(city)
+func (m Meteorologist) WeatherForecast(city string, cnt string) DailyWeather {
+	dw := DailyWeather{}
+	link := createLink(city, cnt)
 	resp := weatherResponse(link)
-	err := json.Unmarshal(resp, &w)
+	err := json.Unmarshal(resp, &dw)
 	if err != nil {
 		fmt.Println("Error")
 	}
-	return w
+	return dw
 }
 
 func weatherResponse(link string) []byte {
@@ -34,27 +37,26 @@ func weatherResponse(link string) []byte {
 	return body
 }
 
-func createLink(city string) string {
-	return "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=ru&units=metric&appid=2c19a8c670afc70f2ae7a81f229fce3d"
-//	return "http://api.openweathermap.org/data/2.5/forecast?q=Moscow,us&appid=2c19a8c670afc70f2ae7a81f229fce3d" //link for 5 day forecast
+func createLink(city string, cnt string) string {
+	return "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&lang=ru&cnt=" + cnt + "&appid=" + apiKey
 }
 
-func (w Weather) GetTemperature() (temp float64, tempMin float64, tempMax float64) {
-	temp = w.Main.Temp
-	tempMin = w.Main.TempMin
-	tempMax = w.Main.TempMax
+func (w WeatherForecast) GetTemperature() (temp float64, tempMin float64, tempMax float64) {
+	temp = w.Main.Temp + ansoluteZero
+	tempMin = w.Main.TempMin + ansoluteZero
+	tempMax = w.Main.TempMax + ansoluteZero
 	return
 }
 
-func (w Weather) GetCloudiness() string {
+func (w WeatherForecast) GetCloudiness() string {
 	return w.Sky[0].Description
 }
 
-func (w Weather) GetHumidity() int {
+func (w WeatherForecast) GetHumidity() int {
 	return w.Main.Humidity
 }
 
-func (w Weather) GetWind() (speed float64, direction string, gust int) {
+func (w WeatherForecast) GetWind() (speed float64, direction string, gust int) {
 	speed = w.Wind.Speed
 	direction = windDirection(w.Wind.Deg)
 	gust = w.Wind.Gust
@@ -75,16 +77,33 @@ func windDirection(deg int) string {
 	return ""
 }
 
-func PrintForecast(w Weather) {
-	temp, _, _ := w.GetTemperature()
-	speed, dir, gust := w.GetWind()
-	gustOut := ""
-	if gust != 0 {
-		gustOut = fmt.Sprintf(",c порывами до %v м/c",gust)
+func PrintForecast(weather DailyWeather) {
+	for _, w := range weather.Weather {
+
+		temp, _, _ := w.GetTemperature()
+		speed, dir, gust := w.GetWind()
+		gustOut := ""
+		if gust != 0 {
+			gustOut = fmt.Sprintf(",c порывами до %v м/c", gust)
+		}
+		fmt.Printf("%v в городе %v %v, температура воздуха %.1f°С, ветер %v %v м/с%v.Влажность воздуха %v%%.\n", printDate(w.Dt), weather.City.Name, w.GetCloudiness(), temp, dir, speed, gustOut, w.GetHumidity())
 	}
-	fmt.Printf("Сегодня в городе %v %v, температура воздуха %.1f°С, ветер %v %v м/с%v.Влажность воздуха %v%%. Восход солнца %v, заход солнца %v","CITYNAME",w.GetCloudiness(),temp,dir,speed,gustOut,w.GetHumidity(),encodeTime(w.Sys.Sunrise), encodeTime(w.Sys.Sunset)) //, ветер %v%м/с с порывами до %vм/с. Влажность воздуха %v%%. Восход солнца %v, заход солнца %v.
+	fmt.Printf("Восход солнца %v, заход солнца %v", encodeTime(weather.City.Sunrise), encodeTime(weather.City.Sunset))
 }
 
-func encodeTime(utc int64) string{
-	return time.Unix(utc,0).Format("15:04")
+func encodeTime(utc int64) string {
+	return time.Unix(utc, 0).Format("15:04")
+}
+
+func printDate(utc int64) string {
+	dt := time.Unix(utc, 0)
+	switch dt.Day() {
+	case time.Now().Day():
+		return "Сегодня " + dt.Format("15:04")
+	case time.Now().AddDate(0, 0, 1).Day():
+		return "Завтра " + dt.Format("15:04")
+	default:
+		return dt.Format("02.01.2006 15:04")
+	}
+	return ""
 }
