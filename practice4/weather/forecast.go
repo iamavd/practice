@@ -14,29 +14,22 @@ const apiKey = "2c19a8c670afc70f2ae7a81f229fce3d"
 type Meteorologist struct {
 }
 
-func (m Meteorologist) DailyForecast(city string, cnt int) DailyWeather {
+func (m Meteorologist) DailyForecast(city string, cnt int) (DailyWeather, error) {
 	dw := DailyWeather{}
 	link := createLink(city, cnt)
-	resp := weatherResponse(link)
-	err := json.Unmarshal(resp, &dw)
-	if err != nil {
-		fmt.Println("Error")
-	}
-	return dw
+	resp, err := weatherResponse(link)
+	err = json.Unmarshal(resp, &dw)
+	return dw, err
 }
 
-func(m Meteorologist) WeatherForecast(city string) DailyWeather {
-	return m.DailyForecast(city,1)
+func(m Meteorologist) WeatherForecast(city string) (DailyWeather,error) {
+	dw, err := m.DailyForecast(city,1)
+	return dw, err
 }
-func weatherResponse(link string) []byte {
+func weatherResponse(link string) ([]byte,error) {
 	resp, err := http.Get(link)
-	if err != nil {
-		fmt.Println("Error")
-	}
-
 	body, err := ioutil.ReadAll(resp.Body)
-
-	return body
+	return body,err
 }
 
 func createLink(city string, cnt int) string {
@@ -65,15 +58,15 @@ func (w WeatherForecast) GetWind() (speed float64, direction string, gust int) {
 	return
 }
 
-func (weather DailyWeather) PrintForecast() {
-	for _, w := range weather.Weather {
-		temp, _, _ := w.GetTemperature()
-		speed, dir, gust := w.GetWind()
+func (dw DailyWeather) PrintForecast() {
+	for i, _ := range dw.Weather {
+		temp, _, _ := dw.Weather[i].GetTemperature()
+		speed, dir, gust := dw.Weather[i].GetWind()
 		gustOut := ""
 		if gust != 0 {
 			gustOut = fmt.Sprintf(",c порывами до %v м/c", gust)
 		}
-		fmt.Printf("%v в городе %v %v, температура воздуха %.1f°С, ветер %v %v м/с%v.Влажность воздуха %v%%.\n", printDate(w.Dt), weather.City.Name, w.GetCloudiness(), temp, dir, speed, gustOut, w.GetHumidity())
+		fmt.Printf("%v в городе %v %v, температура воздуха %.1f°С, ветер %v %v м/с%v.Влажность воздуха %v%%.\n", printDate(dw.Weather[i].Dt), dw.City.Name, dw.Weather[i].GetCloudiness(), temp, dir, speed, gustOut, dw.Weather[i].GetHumidity())
 	}
-	fmt.Printf("Восход солнца %v, заход солнца %v\n------\n", encodeTime(weather.City.Sunrise), encodeTime(weather.City.Sunset))
+	fmt.Printf("Восход солнца %v, заход солнца %v\n------\n", encodeTime(dw.City.Sunrise), encodeTime(dw.City.Sunset))
 }
