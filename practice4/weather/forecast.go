@@ -18,6 +18,9 @@ func (m Meteorologist) DailyForecast(city string, cnt int) (DailyWeather, error)
 	dw := DailyWeather{}
 	link := createLink(city, cnt)
 	resp, err := weatherResponse(link)
+	if err != nil {
+		return dw,err
+	}
 	err = json.Unmarshal(resp, &dw)
 	return dw, err
 }
@@ -28,6 +31,9 @@ func(m Meteorologist) WeatherForecast(city string) (DailyWeather,error) {
 }
 func weatherResponse(link string) ([]byte,error) {
 	resp, err := http.Get(link)
+	if err!= nil {
+		return []byte{}, err
+	}
 	body, err := ioutil.ReadAll(resp.Body)
 	return body,err
 }
