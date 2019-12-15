@@ -7,10 +7,10 @@ import (
 
 type Server struct {
 	port            string
-	employeeHandler handler.EmployeeHandler
+	employeeHandler EmployeeHandler
 }
 
-func NewServer(port string, employeeHandler handler.EmployeeHandler) *Server {
+func NewServer(port string, employeeHandler EmployeeHandler) *Server {
 	return &Server{
 		port:            port,
 		employeeHandler: employeeHandler,
