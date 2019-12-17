@@ -12,6 +12,7 @@ type EmployeeService interface {
 	AddEmployee(ctx context.Context, m model.Employee) (*model.IDresponse, error)
 	GetEmployeeByID(ctx context.Context, id string) (*model.Employee, error)
 	GetEmployeeList(ctx context.Context) (*[]model.Employee, error)
+	DeleteEmployee(ctx context.Context, id string) error
 }
 
 type EmployeeHandler struct {
@@ -50,4 +51,15 @@ func (emp EmployeeHandler) GetEmployeeList(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	SendResponse(w, res)
+}
+
+func (emp EmployeeHandler) DeleteEmployee(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("employeeId")
+	err := emp.EmployeeService.DeleteEmployee(r.Context(), id)
+
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+	}
+
+	SendResponse(w, nil)
 }

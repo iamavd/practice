@@ -38,3 +38,13 @@ func (emp Employee) GetEmployeeList(ctx context.Context) (*[]model.Employee, err
 
 	return newEmpList, nil
 }
+
+func (emp Employee) DeleteEmployee(ctx context.Context, id string) error {
+	err := emp.DbEmployee.Remove(ctx, id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

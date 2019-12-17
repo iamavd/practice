@@ -17,6 +17,7 @@ type EmployeeCollection interface {
 	Add(ctx context.Context, m model.Employee) (*model.Employee, error)
 	GetByID(ctx context.Context, id string) (*model.Employee, error)
 	GetList(ctx context.Context) (*[]model.Employee, error)
+	Remove(ctx context.Context, id string) error
 }
 
 func (emp Employee) Add(ctx context.Context, m model.Employee) (*model.Employee, error) {
@@ -59,4 +60,21 @@ func (emp Employee) GetList(ctx context.Context) (*[]model.Employee, error) {
 	}
 
 	return &m, nil
+}
+
+func (emp Employee) Remove(ctx context.Context, id string) error {
+	_id, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = emp.DeleteOne(ctx, bson.M{
+		"_id": _id,
+	})
+
+	if err != nil {
+		return err
+	}
+	return nil
 }
