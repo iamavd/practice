@@ -18,7 +18,7 @@ type EmployeeCollection interface {
 	GetByID(ctx context.Context, id string) (*model.Employee, error)
 	GetList(ctx context.Context) (*[]model.Employee, error)
 	Remove(ctx context.Context, id string) error
-	Update(ctx context.Context, id string, m model.Employee) /*model.UpdateResponse,*/ error
+	Update(ctx context.Context, id string, m model.Employee) error
 }
 
 func (emp Employee) Add(ctx context.Context, m model.Employee) (*model.Employee, error) {
