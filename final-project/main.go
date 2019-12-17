@@ -43,11 +43,20 @@ func main() {
 	}
 	employeeHandler := handler.EmployeeHandler{EmployeeService: employeeController}
 
+	departmentController := controller.Department{
+		DbDepartment: &mongodb.Department{
+			db.Collection("Department"),
+		},
+	}
+	departmentHandler := handler.DepartmentHandler{DepartmentService: departmentController}
+
 	http.HandleFunc("/employee/add", employeeHandler.Add)
 	http.HandleFunc("/employee/get", employeeHandler.GetEmployee)
 	http.HandleFunc("/employee/getlist", employeeHandler.GetEmployeeList)
 	http.HandleFunc("/employee/remove", employeeHandler.DeleteEmployee)
 	http.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
+
+	http.HandleFunc("/department/add", departmentHandler.Add)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

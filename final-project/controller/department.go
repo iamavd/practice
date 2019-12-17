@@ -7,11 +7,11 @@ import (
 )
 
 type Department struct {
-	DbDepartmnet mongodb.DepartmentCollection
+	DbDepartment mongodb.DepartmentCollection
 }
 
 func (dept Department) AddDepartment(ctx context.Context, m model.Department) (*model.IDresponse, error) {
-	newDept, err := dept.DbDepartmnet.AddDept(ctx, m)
+	newDept, err := dept.DbDepartment.AddDept(ctx, m)
 
 	if err != nil {
 		return nil, err

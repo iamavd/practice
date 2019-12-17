@@ -73,9 +73,9 @@ func (emp EmployeeHandler) EditEmployee(w http.ResponseWriter, r *http.Request) 
 		SendError(err, w, http.StatusBadRequest)
 		return
 	}
-	err1 := emp.EmployeeService.ModifyEmployee(r.Context(), id, m)
-	if err1 != nil {
-		SendError(err1, w, http.StatusInternalServerError)
+	err := emp.EmployeeService.ModifyEmployee(r.Context(), id, m)
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
 		return
 	}
 	SendResponse(w, nil)
