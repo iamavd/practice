@@ -15,12 +15,11 @@ type ResponseError struct {
 }
 
 func SendError(err error, w http.ResponseWriter, code int) {
-	json.NewEncoder(w).Encode(ResponseError{Error: err.Error()})
 	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(ResponseError{Error: err.Error()})
 }
 
 func SendResponse(w http.ResponseWriter, res interface{}) {
-	json.NewEncoder(w).Encode(res)
 	w.WriteHeader(http.StatusOK)
-
+	json.NewEncoder(w).Encode(res)
 }

@@ -13,7 +13,7 @@ type EmployeeService interface {
 	GetEmployeeByID(ctx context.Context, id string) (*model.Employee, error)
 	GetEmployeeList(ctx context.Context) (*[]model.Employee, error)
 	DeleteEmployee(ctx context.Context, id string) error
-	ModifyEmployee(ctx context.Context, id string, m model.Employee) (int64, error)
+	ModifyEmployee(ctx context.Context, id string, m model.Employee) error
 }
 
 type EmployeeHandler struct {
@@ -73,10 +73,10 @@ func (emp EmployeeHandler) EditEmployee(w http.ResponseWriter, r *http.Request) 
 		SendError(err, w, http.StatusBadRequest)
 		return
 	}
-	res, err := emp.EmployeeService.ModifyEmployee(r.Context(), id, m)
-	if err != nil {
-		SendError(err, w, http.StatusInternalServerError)
+	err1 := emp.EmployeeService.ModifyEmployee(r.Context(), id, m)
+	if err1 != nil {
+		SendError(err1, w, http.StatusInternalServerError)
 		return
 	}
-	SendResponse(w, res)
+	SendResponse(w, nil)
 }
