@@ -16,7 +16,3 @@ type Employee struct {
 	Profession  string             `bson:"profession"`
 	Address     string             `bson:"address"`
 }
-
-type IDresponse struct {
-	Id string `json:"id"`
-}

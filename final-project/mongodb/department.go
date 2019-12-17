@@ -14,7 +14,7 @@ type Department struct {
 }
 
 type DepartmentCollection interface {
-	AddDept(ctx context.Context, m model.Employee) (*model.Department, error)
+	AddDept(ctx context.Context, m model.Department) (*model.Department, error)
 	AddEmployeeToDept(ctx context.Context, departmentId string, employeeId string) error
 }
 
@@ -41,12 +41,12 @@ func (dept Department) AddEmployeeToDept(ctx context.Context, departmentId strin
 	if err != nil {
 		return err
 	}
-	
+
 	_, err = dept.UpdateOne(ctx, bson.M{
-		"_id" : _idDept,
+		"_id": _idDept,
 	}, bson.M{
-		"$push" : {
-			"employees" : _idEmp,
+		"$push": bson.M{
+			"employees": _idEmp,
 		},
 	})
 
