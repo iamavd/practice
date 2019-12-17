@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"final-project/controller"
 	"final-project/handler"
 	"final-project/mongodb"
 	"log"
@@ -35,10 +36,17 @@ func main() {
 		}
 	}()
 
-	http.HandleFunc("/", handler.Sayhello)
+	employeeController := controller.Employee{
+		DbEmployee: &mongodb.Employee{
+			db.Collection("Employee"),
+		},
+	}
+	employeeHandler := handler.EmployeeHandler{EmployeeService: employeeController}
+
+	http.HandleFunc("/employee/add", employeeHandler.Add)
+	http.HandleFunc("/employee/get", employeeHandler.GetEmployee)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
-
 }
