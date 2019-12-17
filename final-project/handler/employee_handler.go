@@ -9,9 +9,9 @@ import (
 )
 
 type EmployeeService interface {
-	//GetEmployeeList(w http.ResponseWriter, r *http.Request)
 	AddEmployee(ctx context.Context, m model.Employee) (*model.IDresponse, error)
 	GetEmployeeByID(ctx context.Context, id string) (*model.Employee, error)
+	GetEmployeeList(ctx context.Context) (*[]model.Employee, error)
 }
 
 type EmployeeHandler struct {
@@ -42,12 +42,12 @@ func (emp EmployeeHandler) GetEmployee(w http.ResponseWriter, r *http.Request) {
 	SendResponse(w, res)
 }
 
-/*
-func (h *employeeHandler) GetEmployeeList(w http.ResponseWriter, r *http.Request) {
+func (emp EmployeeHandler) GetEmployeeList(w http.ResponseWriter, r *http.Request) {
+	res, err := emp.EmployeeService.GetEmployeeList(r.Context())
 
-		emps, _ := h.employeeRepository.GetEmployeesList()
-
-		fmt.Fprintln(w, *emps[0], *emps[1])
-
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+		return
+	}
+	SendResponse(w, res)
 }
-*/

@@ -16,6 +16,7 @@ type Employee struct {
 type EmployeeCollection interface {
 	Add(ctx context.Context, m model.Employee) (*model.Employee, error)
 	GetByID(ctx context.Context, id string) (*model.Employee, error)
+	GetList(ctx context.Context) (*[]model.Employee, error)
 }
 
 func (emp Employee) Add(ctx context.Context, m model.Employee) (*model.Employee, error) {
@@ -42,5 +43,20 @@ func (emp Employee) GetByID(ctx context.Context, id string) (*model.Employee, er
 	if err := cursor.Decode(&m); err != nil {
 		return nil, err
 	}
+	return &m, nil
+}
+
+func (emp Employee) GetList(ctx context.Context) (*[]model.Employee, error) {
+	cursor, err := emp.Find(ctx, bson.M{})
+
+	if err != nil {
+		return nil, err
+	}
+	var m []model.Employee
+
+	if err := cursor.All(ctx, &m); err != nil {
+		return nil, err
+	}
+
 	return &m, nil
 }

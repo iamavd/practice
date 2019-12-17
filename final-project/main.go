@@ -45,6 +45,7 @@ func main() {
 
 	http.HandleFunc("/employee/add", employeeHandler.Add)
 	http.HandleFunc("/employee/get", employeeHandler.GetEmployee)
+	http.HandleFunc("/employee/getlist", employeeHandler.GetEmployeeList)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

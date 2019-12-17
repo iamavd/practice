@@ -27,3 +27,14 @@ func (emp Employee) GetEmployeeByID(ctx context.Context, id string) (*model.Empl
 	}
 	return newEmp, nil
 }
+
+func (emp Employee) GetEmployeeList(ctx context.Context) (*[]model.Employee, error) {
+	newEmpList := &[]model.Employee{}
+	newEmpList, err := emp.DbEmployee.GetList(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newEmpList, nil
+}
