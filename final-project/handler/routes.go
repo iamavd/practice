@@ -14,23 +14,6 @@ type ResponseError struct {
 	Error string `json: "error"`
 }
 
-func NewServer(port string, employeeHandler EmployeeHandler) *Server {
-	return &Server{
-		port:            port,
-		employeeHandler: employeeHandler,
-	}
-}
-
-/*
-func (server *Server) ConfigureAndRun() {
-
-	employeeMux := http.NewServeMux()
-	employeeMux.HandleFunc("/employee", server.employeeHandler.GetEmployeeList)
-
-	fmt.Printf("listening at %s", server.port)
-	http.ListenAndServe(server.port, employeeMux)
-}
-*/
 func SendError(err error, w http.ResponseWriter, code int) {
 	json.NewEncoder(w).Encode(ResponseError{Error: err.Error()})
 	w.WriteHeader(code)
