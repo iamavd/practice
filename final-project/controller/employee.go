@@ -48,3 +48,13 @@ func (emp Employee) DeleteEmployee(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (emp Employee) ModifyEmployee(ctx context.Context, id string, m model.Employee) (int64, error) {
+	updatedCout, err := emp.DbEmployee.Update(ctx, id, m)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return updatedCout, nil
+}
