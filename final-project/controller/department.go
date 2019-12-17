@@ -21,5 +21,10 @@ func (dept Department) AddDepartment(ctx context.Context, m model.Department) (*
 }
 
 func (dept Department) AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error {
+	err := dept.DbDepartment.AddEmployeeToDept(ctx, departmentId, employeeId)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

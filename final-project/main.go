@@ -57,6 +57,7 @@ func main() {
 	http.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
 
 	http.HandleFunc("/department/add", departmentHandler.Add)
+	http.HandleFunc("/department/addemp", departmentHandler.AddToDepartment)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
