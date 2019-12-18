@@ -13,6 +13,8 @@ type DepartmentService interface {
 	AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error
 	AddHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error
 	RemoveEmloyeeFromDepartment(ctx context.Context, departmentId string, employeeId string) error
+	EditDepartment(ctx context.Context, departmentId string, m model.Department) error
+	RemoveDepartment(ctx context.Context, departmentId string) error
 }
 
 type DepartmentHandler struct {
@@ -70,4 +72,34 @@ func (dept DepartmentHandler) AddHeadOfDepartment(w http.ResponseWriter, r *http
 	SendResponse(w, nil)
 
 	return
+}
+
+func (dept DepartmentHandler) EditDepartment(w http.ResponseWriter, r *http.Request) {
+	deptId := r.URL.Query().Get("departmentId")
+
+	var m model.Department
+	if err := json.NewDecoder(r.Body).Decode(&m); err != nil {
+		SendError(err, w, http.StatusBadRequest)
+		return
+	}
+
+	err := dept.DepartmentService.EditDepartment(r.Context(), deptId, m)
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+		return
+	}
+	SendResponse(w, nil)
+
+	return
+}
+
+func (dept DepartmentHandler) RemoveDepartment(w http.ResponseWriter, r *http.Request) {
+	deptId := r.URL.Query().Get("departmentId")
+	err := dept.DepartmentService.RemoveDepartment(r.Context(), deptId)
+
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+	}
+
+	SendResponse(w, nil)
 }

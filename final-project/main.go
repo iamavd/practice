@@ -53,13 +53,15 @@ func main() {
 	http.HandleFunc("/employee/add", employeeHandler.Add)
 	http.HandleFunc("/employee/get", employeeHandler.GetEmployee)
 	http.HandleFunc("/employee/getlist", employeeHandler.GetEmployeeList)
-	http.HandleFunc("/employee/remove", employeeHandler.DeleteEmployee)
+	http.HandleFunc("/employee/remove", employeeHandler.RemoveEmployee)
 	http.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
 
 	http.HandleFunc("/department/add", departmentHandler.Add)
 	http.HandleFunc("/department/addemp", departmentHandler.AddToDepartment)
 	http.HandleFunc("/department/addhead", departmentHandler.AddHeadOfDepartment)
 	http.HandleFunc("/department/removeemp", departmentHandler.RemoveEmloyeeFromDepartment)
+	http.HandleFunc("/department/edit", departmentHandler.EditDepartment)
+	http.HandleFunc("/department/remove", departmentHandler.RemoveDepartment)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

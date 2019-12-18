@@ -46,3 +46,22 @@ func (dept Department) AddHeadOfDepartment(ctx context.Context, departmentId str
 
 	return nil
 }
+
+func (dept Department) EditDepartment(ctx context.Context, departmentId string, m model.Department) error {
+	err := dept.DbDepartment.EditDept(ctx, departmentId, m)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (dept Department) RemoveDepartment(ctx context.Context, departmentId string) error {
+	err := dept.DbDepartment.Remove(ctx, departmentId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

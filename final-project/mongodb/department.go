@@ -18,6 +18,8 @@ type DepartmentCollection interface {
 	AddEmployeeToDept(ctx context.Context, departmentId string, employeeId string) error
 	AddDeptHead(ctx context.Context, departmentId string, employeeId string) error
 	RemoveEmployee(ctx context.Context, departmentId string, employeeId string) error
+	EditDept(ctx context.Context, departmentId string, m model.Department) error
+	Remove(ctx context.Context, departmentId string) error
 }
 
 func (dept Department) AddDept(ctx context.Context, m model.Department) (*model.Department, error) {
@@ -117,5 +119,46 @@ func (dept Department) AddDeptHead(ctx context.Context, departmentId string, emp
 		return err
 	}
 
+	return nil
+}
+
+func (dept Department) EditDept(ctx context.Context, departmentId string, m model.Department) error {
+	_idDept, err := primitive.ObjectIDFromHex(departmentId)
+
+	if err != nil {
+		return err
+	}
+
+	filter := bson.M{"_id": _idDept}
+	update := bson.M{
+		"$set": bson.M{
+			"deptName":    m.Name,
+			"description": m.Description,
+		},
+	}
+
+	_, err = dept.UpdateOne(ctx, filter, update)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (dept Department) Remove(ctx context.Context, departmentId string) error {
+	_idDept, err := primitive.ObjectIDFromHex(departmentId)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = dept.DeleteOne(ctx, bson.M{
+		"_id": _idDept,
+	})
+
+	if err != nil {
+		return err
+	}
 	return nil
 }
