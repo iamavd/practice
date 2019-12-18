@@ -41,30 +41,15 @@ func main() {
 			db.Collection("Employee"),
 		},
 	}
-	employeeHandler := handler.EmployeeHandler{EmployeeService: employeeController}
 
 	departmentController := controller.Department{
 		DbDepartment: &mongodb.Department{
 			db.Collection("Department"),
 		},
 	}
-	departmentHandler := handler.DepartmentHandler{DepartmentService: departmentController}
 
-	http.HandleFunc("/employee/add", employeeHandler.Add)
-	http.HandleFunc("/employee/get", employeeHandler.GetEmployee)
-	http.HandleFunc("/employee/getlist", employeeHandler.GetEmployeeList)
-	http.HandleFunc("/employee/remove", employeeHandler.RemoveEmployee)
-	http.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
-
-	http.HandleFunc("/department/add", departmentHandler.Add)
-	http.HandleFunc("/department/getlist", departmentHandler.GetDepartmentList)
-	http.HandleFunc("/department/empadd", departmentHandler.AddToDepartment)
-	http.HandleFunc("/department/headedit", departmentHandler.EditHeadOfDepartment)
-	http.HandleFunc("/department/empremove", departmentHandler.RemoveEmloyeeFromDepartment)
-	http.HandleFunc("/department/edit", departmentHandler.EditDepartment)
-	http.HandleFunc("/department/remove", departmentHandler.RemoveDepartment)
-
-	err := http.ListenAndServe(":8080", nil)
+	mux := handler.CreateMux(employeeController, departmentController)
+	err := http.ListenAndServe(":8080", mux)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
