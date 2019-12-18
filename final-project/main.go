@@ -57,9 +57,9 @@ func main() {
 	http.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
 
 	http.HandleFunc("/department/add", departmentHandler.Add)
-	http.HandleFunc("/department/addemp", departmentHandler.AddToDepartment)
-	http.HandleFunc("/department/addhead", departmentHandler.AddHeadOfDepartment)
-	http.HandleFunc("/department/removeemp", departmentHandler.RemoveEmloyeeFromDepartment)
+	http.HandleFunc("/department/empadd", departmentHandler.AddToDepartment)
+	http.HandleFunc("/department/headedit", departmentHandler.EditHeadOfDepartment)
+	http.HandleFunc("/department/empremove", departmentHandler.RemoveEmloyeeFromDepartment)
 	http.HandleFunc("/department/edit", departmentHandler.EditDepartment)
 	http.HandleFunc("/department/remove", departmentHandler.RemoveDepartment)
 

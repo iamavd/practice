@@ -11,7 +11,7 @@ import (
 type DepartmentService interface {
 	AddDepartment(ctx context.Context, m model.Department) (*model.IDresponse, error)
 	AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error
-	AddHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error
+	EditHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error
 	RemoveEmloyeeFromDepartment(ctx context.Context, departmentId string, employeeId string) error
 	EditDepartment(ctx context.Context, departmentId string, m model.Department) error
 	RemoveDepartment(ctx context.Context, departmentId string) error
@@ -61,10 +61,10 @@ func (dept DepartmentHandler) RemoveEmloyeeFromDepartment(w http.ResponseWriter,
 	return
 }
 
-func (dept DepartmentHandler) AddHeadOfDepartment(w http.ResponseWriter, r *http.Request) {
+func (dept DepartmentHandler) EditHeadOfDepartment(w http.ResponseWriter, r *http.Request) {
 	deptId := r.URL.Query().Get("departmentId")
 	empId := r.URL.Query().Get("employeeId")
-	err := dept.DepartmentService.AddHeadOfDepartment(r.Context(), deptId, empId)
+	err := dept.DepartmentService.EditHeadOfDepartment(r.Context(), deptId, empId)
 	if err != nil {
 		SendError(err, w, http.StatusInternalServerError)
 		return

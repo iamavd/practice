@@ -16,7 +16,7 @@ type Department struct {
 type DepartmentCollection interface {
 	AddDept(ctx context.Context, m model.Department) (*model.Department, error)
 	AddEmployeeToDept(ctx context.Context, departmentId string, employeeId string) error
-	AddDeptHead(ctx context.Context, departmentId string, employeeId string) error
+	EditDeptHead(ctx context.Context, departmentId string, employeeId string) error
 	RemoveEmployee(ctx context.Context, departmentId string, employeeId string) error
 	EditDept(ctx context.Context, departmentId string, m model.Department) error
 	Remove(ctx context.Context, departmentId string) error
@@ -96,7 +96,7 @@ func (dept Department) RemoveEmployee(ctx context.Context, departmentId string, 
 	return nil
 }
 
-func (dept Department) AddDeptHead(ctx context.Context, departmentId string, employeeId string) error {
+func (dept Department) EditDeptHead(ctx context.Context, departmentId string, employeeId string) error {
 	_idDept, err := primitive.ObjectIDFromHex(departmentId)
 	if err != nil {
 		return err

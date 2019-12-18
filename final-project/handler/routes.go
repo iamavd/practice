@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-type Server struct {
-	port            string
-	employeeHandler EmployeeHandler
-}
-
 type ResponseError struct {
 	Error string `json: "error"`
 }

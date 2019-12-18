@@ -38,8 +38,8 @@ func (dept Department) RemoveEmloyeeFromDepartment(ctx context.Context, departme
 	return nil
 }
 
-func (dept Department) AddHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error {
-	err := dept.DbDepartment.AddDeptHead(ctx, departmentId, employeeId)
+func (dept Department) EditHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error {
+	err := dept.DbDepartment.EditDeptHead(ctx, departmentId, employeeId)
 	if err != nil {
 		return err
 	}
