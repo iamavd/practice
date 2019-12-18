@@ -42,19 +42,3 @@ func CreateMux(employeeService EmployeeService, departmentService DepartmentServ
 
 	return mux
 }
-
-func CreateMuxEmp(employeeService EmployeeService) *http.ServeMux {
-
-	employeeHandler := EmployeeHandler{EmployeeService: employeeService}
-	//departmentHandler := DepartmentHandler{DepartmentService: departmentService}
-
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/employee/add", employeeHandler.Add)
-	mux.HandleFunc("/employee/get", employeeHandler.GetEmployee)
-	mux.HandleFunc("/employee/getlist", employeeHandler.GetEmployeeList)
-	mux.HandleFunc("/employee/remove", employeeHandler.RemoveEmployee)
-	mux.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
-
-	return mux
-}
