@@ -47,28 +47,6 @@ func createOptions(cfg *Config) (*options.ClientOptions, error) {
 	return opts, nil
 }
 
-/*
-func InitDB() {
-	ctx := context.Background()
-
-	client, err := mongo.NewClinet(options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer func(ctx context.Context, client *mongo.Client) {
-		err := client.Disconnect(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}()
-}*/
-
 func checkConnection(ctx context.Context, c *mongo.Client) error {
 	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
