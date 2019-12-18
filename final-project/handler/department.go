@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"final-project/model"
-	"fmt"
 
 	"encoding/json"
 	"net/http"
@@ -12,6 +11,7 @@ import (
 type DepartmentService interface {
 	AddDepartment(ctx context.Context, m model.Department) (*model.IDresponse, error)
 	AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error
+	AddHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error
 }
 
 type DepartmentHandler struct {
@@ -35,8 +35,20 @@ func (dept DepartmentHandler) Add(w http.ResponseWriter, r *http.Request) {
 func (dept DepartmentHandler) AddToDepartment(w http.ResponseWriter, r *http.Request) {
 	deptId := r.URL.Query().Get("departmentId")
 	empId := r.URL.Query().Get("employeeId")
-	fmt.Println("dept ", deptId, "emp", empId)
 	err := dept.DepartmentService.AddEmployeeToDepartment(r.Context(), deptId, empId)
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+		return
+	}
+	SendResponse(w, nil)
+
+	return
+}
+
+func (dept DepartmentHandler) AddHeadOfDepartment(w http.ResponseWriter, r *http.Request) {
+	deptId := r.URL.Query().Get("departmentId")
+	empId := r.URL.Query().Get("employeeId")
+	err := dept.DepartmentService.AddHeadOfDepartment(r.Context(), deptId, empId)
 	if err != nil {
 		SendError(err, w, http.StatusInternalServerError)
 		return
