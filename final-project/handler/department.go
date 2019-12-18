@@ -10,6 +10,7 @@ import (
 
 type DepartmentService interface {
 	AddDepartment(ctx context.Context, m model.Department) (*model.IDresponse, error)
+	GetDepartmentList(ctx context.Context) (*[]model.Department, error)
 	AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error
 	EditHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error
 	RemoveEmloyeeFromDepartment(ctx context.Context, departmentId string, employeeId string) error
@@ -35,6 +36,15 @@ func (dept DepartmentHandler) Add(w http.ResponseWriter, r *http.Request) {
 	SendResponse(w, res)
 }
 
+func (dept DepartmentHandler) GetDepartmentList(w http.ResponseWriter, r *http.Request) {
+	res, err := dept.DepartmentService.GetDepartmentList(r.Context())
+
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+		return
+	}
+	SendResponse(w, res)
+}
 func (dept DepartmentHandler) AddToDepartment(w http.ResponseWriter, r *http.Request) {
 	deptId := r.URL.Query().Get("departmentId")
 	empId := r.URL.Query().Get("employeeId")

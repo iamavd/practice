@@ -15,6 +15,7 @@ type Department struct {
 
 type DepartmentCollection interface {
 	AddDept(ctx context.Context, m model.Department) (*model.Department, error)
+	GetList(ctx context.Context) (*[]model.Department, error)
 	AddEmployeeToDept(ctx context.Context, departmentId string, employeeId string) error
 	EditDeptHead(ctx context.Context, departmentId string, employeeId string) error
 	RemoveEmployee(ctx context.Context, departmentId string, employeeId string) error
@@ -28,6 +29,21 @@ func (dept Department) AddDept(ctx context.Context, m model.Department) (*model.
 	_, err := dept.InsertOne(ctx, m)
 
 	if err != nil {
+		return nil, err
+	}
+
+	return &m, nil
+}
+
+func (dept Department) GetList(ctx context.Context) (*[]model.Department, error) {
+	cursor, err := dept.Find(ctx, bson.M{})
+
+	if err != nil {
+		return nil, err
+	}
+	var m []model.Department
+
+	if err := cursor.All(ctx, &m); err != nil {
 		return nil, err
 	}
 

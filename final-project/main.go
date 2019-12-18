@@ -57,6 +57,7 @@ func main() {
 	http.HandleFunc("/employee/edit", employeeHandler.EditEmployee)
 
 	http.HandleFunc("/department/add", departmentHandler.Add)
+	http.HandleFunc("/department/getlist", departmentHandler.GetDepartmentList)
 	http.HandleFunc("/department/empadd", departmentHandler.AddToDepartment)
 	http.HandleFunc("/department/headedit", departmentHandler.EditHeadOfDepartment)
 	http.HandleFunc("/department/empremove", departmentHandler.RemoveEmloyeeFromDepartment)

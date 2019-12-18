@@ -20,6 +20,17 @@ func (dept Department) AddDepartment(ctx context.Context, m model.Department) (*
 	return &model.IDresponse{Id: newDept.ID.Hex()}, nil
 }
 
+func (dept Department) GetDepartmentList(ctx context.Context) (*[]model.Department, error) {
+	newDeptList := &[]model.Department{}
+	newDeptList, err := dept.DbDepartment.GetList(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newDeptList, nil
+}
+
 func (dept Department) AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error {
 	err := dept.DbDepartment.AddEmployeeToDept(ctx, departmentId, employeeId)
 	if err != nil {
