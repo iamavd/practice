@@ -29,6 +29,15 @@ func (dept Department) AddEmployeeToDepartment(ctx context.Context, departmentId
 	return nil
 }
 
+func (dept Department) RemoveEmloyeeFromDepartment(ctx context.Context, departmentId string, employeeId string) error {
+	err := dept.DbDepartment.RemoveEmployee(ctx, departmentId, employeeId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (dept Department) AddHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error {
 	err := dept.DbDepartment.AddDeptHead(ctx, departmentId, employeeId)
 	if err != nil {

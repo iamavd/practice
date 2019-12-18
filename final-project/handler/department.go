@@ -12,6 +12,7 @@ type DepartmentService interface {
 	AddDepartment(ctx context.Context, m model.Department) (*model.IDresponse, error)
 	AddEmployeeToDepartment(ctx context.Context, departmentId string, employeeId string) error
 	AddHeadOfDepartment(ctx context.Context, departmentId string, employeeId string) error
+	RemoveEmloyeeFromDepartment(ctx context.Context, departmentId string, employeeId string) error
 }
 
 type DepartmentHandler struct {
@@ -36,6 +37,19 @@ func (dept DepartmentHandler) AddToDepartment(w http.ResponseWriter, r *http.Req
 	deptId := r.URL.Query().Get("departmentId")
 	empId := r.URL.Query().Get("employeeId")
 	err := dept.DepartmentService.AddEmployeeToDepartment(r.Context(), deptId, empId)
+	if err != nil {
+		SendError(err, w, http.StatusInternalServerError)
+		return
+	}
+	SendResponse(w, nil)
+
+	return
+}
+
+func (dept DepartmentHandler) RemoveEmloyeeFromDepartment(w http.ResponseWriter, r *http.Request) {
+	deptId := r.URL.Query().Get("departmentId")
+	empId := r.URL.Query().Get("employeeId")
+	err := dept.DepartmentService.RemoveEmloyeeFromDepartment(r.Context(), deptId, empId)
 	if err != nil {
 		SendError(err, w, http.StatusInternalServerError)
 		return

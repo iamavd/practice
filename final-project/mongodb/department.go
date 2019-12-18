@@ -17,6 +17,7 @@ type DepartmentCollection interface {
 	AddDept(ctx context.Context, m model.Department) (*model.Department, error)
 	AddEmployeeToDept(ctx context.Context, departmentId string, employeeId string) error
 	AddDeptHead(ctx context.Context, departmentId string, employeeId string) error
+	RemoveEmployee(ctx context.Context, departmentId string, employeeId string) error
 }
 
 func (dept Department) AddDept(ctx context.Context, m model.Department) (*model.Department, error) {
@@ -50,6 +51,37 @@ func (dept Department) AddEmployeeToDept(ctx context.Context, departmentId strin
 
 	update := bson.M{
 		"$push": bson.M{
+			"employees": _idEmp,
+		},
+	}
+	_, err = dept.UpdateOne(ctx, filter, update)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (dept Department) RemoveEmployee(ctx context.Context, departmentId string, employeeId string) error {
+	_idDept, err := primitive.ObjectIDFromHex(departmentId)
+
+	if err != nil {
+		return err
+	}
+
+	_idEmp, err := primitive.ObjectIDFromHex(employeeId)
+
+	if err != nil {
+		return err
+	}
+
+	filter := bson.M{
+		"_id": _idDept,
+	}
+
+	update := bson.M{
+		"$pull": bson.M{
 			"employees": _idEmp,
 		},
 	}
